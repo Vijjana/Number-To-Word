@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Converter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  #result {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <input type="text" id="numberInput" placeholder="Enter a number (0-999)">
+  <input type="text" id="result" readonly>
+</div>
+
+<script>
+  function convertNumber() {
+    var numberInput = document.getElementById("numberInput").value;
+    var resultField = document.getElementById("result");
+
+    // Check if input is a valid number and within range
+    if (isNaN(numberInput) || numberInput < 0 || numberInput > 999) {
+      resultField.value = "Out of range";
+    } else {
+      var numberInWords = convertToWords(numberInput);
+      resultField.value = numberInWords;
+    }
+  }
+
+  function convertToWords(number) {
+    var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    var teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+    var numString = number.toString();
+
+    if (number === 0) {
+      return 'zero';
+    }
+
+    if (number < 10) {
+      return ones[number];
+    }
+
+    if (number < 20) {
+      return teens[number - 10];
+    }
+
+    if (numString.length === 2) {
+      return tens[numString[0]] + ' ' + ones[numString[1]];
+    }
+
+    if (numString.length === 3) {
+      if (numString[1] === '0' && numString[2] === '0') {
+        return ones[numString[0]] + ' hundred';
+      } else {
+        return ones[numString[0]] + ' hundred and ' + convertToWords(parseInt(numString[1] + numString[2]));
+      }
+    }
+  }
+
+  // Event listener for input change
+  document.getElementById("numberInput").addEventListener("input", convertNumber);
+</script>
+</body>
+</html>
